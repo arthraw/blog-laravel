@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -18,8 +20,13 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    protected $primaryKey = 'user_id';
+
     protected $fillable = [
-        'name',
+        'user_id',
+        'post_id',
+        'username',
         'email',
         'password',
     ];
@@ -35,6 +42,16 @@ class User extends Authenticatable
     ];
 
     public $incrementing = false;
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->user_id = (string) Str::uuid();
+        });
+    }
+
+    protected $keyType = 'string';
 
 
     /**
