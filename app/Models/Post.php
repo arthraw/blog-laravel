@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -25,6 +26,14 @@ class Post extends Model
         'created_at',
         'updated_at'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->post_id = (string) Str::uuid();
+        });
+    }
 
     public function user() : BelongsTo
     {
