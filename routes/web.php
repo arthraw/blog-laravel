@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Middleware\ValidUserAuth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+
+Route::middleware(ValidUserAuth::class)->group(function () {
+    Route::view('/', 'welcome')->middleware();
+});
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(ValidUserAuth::class)
     ->name('dashboard');
 
 Route::view('profile', 'profile')
